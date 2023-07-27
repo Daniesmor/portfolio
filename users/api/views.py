@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from users.api.serializers import UserSerializer, UserUpdateSerializer
 from users.models import User
+from rest_framework.decorators import api_view
 
 
 class UserView(APIView):
@@ -20,3 +21,10 @@ class UserView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_all_users(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
