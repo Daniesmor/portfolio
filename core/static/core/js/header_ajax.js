@@ -30,12 +30,28 @@ function mostrarCertificados(data) {
 
 
     if (!certAgregado) {
-        for (const item of data) {
-            console.log(item)
+        for (const item of data) {    
             agregarCertificate(item)
         }
         certAgregado = true
-    } 
+    } else {
+        for (const item of data) {
+            actualizarCertificate(item)
+        }
+    }
+
+    function actualizarCertificate(data) {
+        console.log(data)
+        const imgElemento = document.getElementById(`img-${data.id}`);
+        const h3Eelemento = document.getElementById(`h3-${data.id}`);
+        const h4UdemyElemento = document.getElementById(`h4Udemy-${data.id}`)
+        const cert_urlElemento = document.getElementById(`cert_url-${data.id}`)
+        
+        imgElemento.src = data.photo;
+        h3Eelemento.textContent = data.name;
+        h4UdemyElemento.textContent = `${data.company} - ${expeditionCert}`;
+        cert_urlElemento.textContent = data.certfication_id;
+    }
     
     
     function agregarCertificate(data) {
@@ -60,6 +76,7 @@ function mostrarCertificados(data) {
 
         // Crear la imagen
         const img = document.createElement("img");
+        img.setAttribute("id", `img-${data.id}`);
         img.src = data.photo;
         img.alt = "...";
         img.classList.add("img-thumbnail");
@@ -74,13 +91,16 @@ function mostrarCertificados(data) {
         // Crear los elementos <h3> con clase "title certtitle" y <h4> con clases "certificate certinfo" y "certificate-id text-truncate certid"
         const h3 = document.createElement("h3");
         h3.classList.add("title", "certtitle");
+        h3.setAttribute("id", `h3-${data.id}`);
         h3.textContent = data.name;
 
         const h4Udemy = document.createElement("h4");
-        h4Udemy.classList.add("certificate", "certinfo");
+        h4Udemy.classList.add("title", "certtitle");
+        h4Udemy.setAttribute("id", `h4Udemy-${data.id}`);
         h4Udemy.textContent = `${data.company} - ${expeditionCert}`;
 
         const cert_url = document.createElement("a");
+        cert_url.setAttribute("id", `cert_url-${data.id}`);
         cert_url.href = data.certificate_link;
         const h4CertID = document.createElement("h4");
         h4CertID.classList.add("certificate-id", "text-truncate", "certid");

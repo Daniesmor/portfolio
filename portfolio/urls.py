@@ -43,5 +43,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('', include('core.urls')),
     path('api/', include('certifications.api.router')),
-    path('certifications/', include('certifications.urls'))
+    path('certifications/', include('certifications.urls')),
+    path('api/', include('education.api.router')),
+    path('eduaction/', include('education.urls')),
 ]
