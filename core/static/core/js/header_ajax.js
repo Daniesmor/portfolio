@@ -2,6 +2,7 @@
 let redesSocialesAgregadas = false;
 let contactoAgregado = false;
 let certAgregado = false;
+let eduAgregado = false;
 
 
 function obtenerDatosYActualizar() {
@@ -22,6 +23,73 @@ function obtenerDatosYActualizar() {
             
         })
         .catch(error => console.error('Error al obtener los datos:', error));
+
+    fetch('/api/education/daniel/')  // Usamos la URL de la vista 'UserView' en la app 'users'
+        .then(response => response.json())
+        .then(education => {
+            // Llamar a la función para mostrar los datos en la página
+            mostrarEdu(education);
+            
+        })
+        .catch(error => console.error('Error al obtener los datos:', error));
+}
+
+function mostrarEdu(data) {
+    //console.log(data);
+    const eduElemento = document.getElementById('eduaction');
+
+    if (!eduAgregado) {
+        for (const item of data) {
+            agregarEdu(item);
+        }
+        eduAgregado = true;
+    } 
+
+    function agregarEdu(data) {
+        // Crear elementos y asignar atributos
+        const divItem = document.createElement('div');
+        divItem.classList.add('item', 'row');
+
+        const divCol2 = document.createElement('div');
+        divCol2.classList.add('col-2');
+
+        const img = document.createElement('img');
+        img.classList.add('img-fluid', 'project-image', 'rounded', 'shadow-sm', 'img-thumbnail');
+        img.src = data.photo;
+        img.alt = '...';
+
+        const divDesc = document.createElement('div');
+        divDesc.classList.add('desc', 'col-md-8', 'col-13');
+
+        const h4 = document.createElement('h4');
+        h4.classList.add('fw-bold');
+        h4.textContent = data.degree;
+
+
+        const h3 = document.createElement('h3');
+        h3.classList.add('title', 'fw-medium');
+        h3.textContent = data.university;
+
+
+        const p = document.createElement('p');
+        p.classList.add('fw-light');
+        p.textContent = `${data.start_year} - ${data.end_year}`;
+
+
+        // Estructurar elementos en el orden deseado
+        divCol2.appendChild(img);
+        divDesc.appendChild(h4);
+        divDesc.appendChild(h3);
+        divDesc.appendChild(p);
+
+        divItem.appendChild(divCol2);
+        divItem.appendChild(divDesc);
+
+        eduElemento.appendChild(divItem);
+
+        return eduElemento;
+    }
+
 }
 
 function mostrarCertificados(data) {
@@ -41,7 +109,6 @@ function mostrarCertificados(data) {
     }
 
     function actualizarCertificate(data) {
-        console.log(data)
         const imgElemento = document.getElementById(`img-${data.id}`);
         const h3Eelemento = document.getElementById(`h3-${data.id}`);
         const h4UdemyElemento = document.getElementById(`h4Udemy-${data.id}`)
