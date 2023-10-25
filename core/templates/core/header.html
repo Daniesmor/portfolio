@@ -15,7 +15,7 @@
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
-    <script src="static/core/js/header_ajax.js"></script>
+    <script src="{% static 'core/js/header_ajax.js' %}"></script>
     <!-- FontAwesome JS -->
     <script defer src="{% static 'core/fontawesome/js/all.js' %}"></script>
 
@@ -85,12 +85,13 @@
                     </aside><!--//aside-->
                     {% block certifications %}{% endblock %}
                 </div><!--//secondary-->
-
-
-
+    
 
     </div><!--//row-->
     </div><!--//masonry-->
+
+
+
 
 
 

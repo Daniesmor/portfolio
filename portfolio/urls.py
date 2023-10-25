@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from categories.api.router import router_categories
+from posts.api.router import router_posts
 
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -46,4 +48,7 @@ urlpatterns = [
     path('certifications/', include('certifications.urls')),
     path('api/', include('education.api.router')),
     path('eduaction/', include('education.urls')),
+    path('api/', include(router_categories.urls)),
+    path('api/', include(router_posts.urls)),
+    path('posts/', include('posts.urls'))
 ]
