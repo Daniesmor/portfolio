@@ -17,3 +17,17 @@ class PostView(View):
         }
 
         return render(request, self.template_name, context)
+    
+class PostListView(View):
+    template_name = 'posts/post-list.html'
+
+    def get(self, request, user):
+        api_url = f"http://127.0.0.1:8000/api/posts/?user={user}"
+        response = requests.get(api_url)
+        post_data = response.json()
+
+        context = {
+            'posts' : post_data
+        }
+
+        return render(request, self.template_name, context)
