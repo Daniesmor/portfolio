@@ -3,11 +3,23 @@
 let certAgregado = false;
 let eduAgregado = false;
 let postAgregado = false;
+let contactoAgregado = false;
+let seemore = false;
 
+var user = document.getElementById('context').getAttribute('user'); 
 
 function obtenerDatosYActualizar() {
+    
+
+    fetch(`http://127.0.0.1:8000/api/auth/user/${user}/`)  // Usamos la URL de la vista 'UserView' en la app 'users'
+        .then(response => response.json())
+        .then(data => {
+            // Llamar a la función para mostrar los datos en la página
+            mostrarAbout(data);
+        })
+        .catch(error => console.error('Error al obtener los datos:', error));
   
-    fetch('/api/certificates/daniel/')  // Usamos la URL de la vista 'UserView' en la app 'users'
+    fetch(`/api/certificates/${user}/`)  // Usamos la URL de la vista 'UserView' en la app 'users'
         .then(response => response.json())
         .then(certificates => {
             // Llamar a la función para mostrar los datos en la página
@@ -16,7 +28,7 @@ function obtenerDatosYActualizar() {
         })
         .catch(error => console.error('Error al obtener los datos:', error));
 
-    fetch('/api/education/daniel/')  // Usamos la URL de la vista 'UserView' en la app 'users'
+    fetch(`/api/education/${user}/`)  // Usamos la URL de la vista 'UserView' en la app 'users'
         .then(response => response.json())
         .then(education => {
             // Llamar a la función para mostrar los datos en la página
@@ -25,7 +37,7 @@ function obtenerDatosYActualizar() {
         })
         .catch(error => console.error('Error al obtener los datos:', error));
 
-    fetch('/api/posts/?user=daniel')  // Usamos la URL de la vista 'UserView' en la app 'users'
+    fetch(`/api/posts/?user=${user}/`)  // Usamos la URL de la vista 'UserView' en la app 'users'
         .then(response => response.json())
         .then(posts => {
             // Llamar a la función para mostrar los datos en la página
@@ -35,9 +47,66 @@ function obtenerDatosYActualizar() {
         .catch(error => console.error('Error al obtener los datos:', error));
 }
 
+function mostrarAbout(data) {
+    const basicInfoElemento = document.getElementById('basics-information');
+
+    const aboutElemento = document.getElementById('about');
+
+
+    // Mostrar el nombre completo en el elemento h1
+    aboutElemento.textContent = data.about_me;
+
+    
+    if (!contactoAgregado) {
+        if (data.email_contact) {
+            agregarInfo("email", data.email_contact, "fa-envelope");
+        }
+        if (data.telf_contact) {
+            agregarInfo("telf", data.telf_contact, "fa-phone");
+        }
+        if (data.location_contact) {
+            agregarInfo("location", data.location_contact, "fa-location-dot");
+        }
+
+        function agregarInfo(nombre, valor, icono) {
+            const i = document.createElement('i');
+            const li = document.createElement('li');
+
+        
+            i.classList.add('fas');
+            i.classList.add(icono);
+            i.setAttribute('class', 'fas fa-location-dot');
+        
+            li.append(i);
+            li.textContent += valor;
+            basicInfoElemento.appendChild(li);
+            
+        }
+               
+        contactoAgregado = true;
+    }
+    
+}
+
 function mostrarPosts(data) {
     nombrePost = data.title
     contentPost = data.content 
+
+    // SEE MORE
+    if (!seemore) {
+        const projectList = document.getElementById('projects-list');
+
+        const seemore_link = document.createElement('a');
+        seemore_link.href = `http://127.0.0.1:8000/posts/user/${data.user.username}`;
+        var seemore_text = document.createElement('p');
+        seemore_link.textContent = 'See more';
+    
+        seemore_link.appendChild(seemore_text);
+        projectList.appendChild(seemore_link);
+    
+        seemore = true;
+    }
+    
     
 
     // Obtener el elemento "projects"
@@ -58,7 +127,6 @@ function mostrarPosts(data) {
         const linkA = document.createElement('a');
         linkA.classList.add('col-md-4', 'col-12');
         linkA.href = `http://127.0.0.1:8000/posts/${data.slug}`;
-        linkA.target = '_blank';
 
         const img = document.createElement('img');
         img.classList.add('img-fluid', 'project-image', 'rounded', 'shadow-sm');
@@ -73,7 +141,6 @@ function mostrarPosts(data) {
         h3.classList.add('title');
         const titleLink = document.createElement('a');
         titleLink.href = `http://127.0.0.1:8000/posts/${data.slug}`;
-        titleLink.target = '_blank';
         titleLink.textContent = data.title;
         h3.appendChild(titleLink);
 
@@ -87,18 +154,21 @@ function mostrarPosts(data) {
         const moreLink = document.createElement('a');
         moreLink.classList.add('more-link');
         moreLink.href = `http://127.0.0.1:8000/posts/${data.slug}`;
-        moreLink.target = '_blank';
         const linkIcon = document.createElement('i');
         linkIcon.classList.add('fas', 'fa-external-link-alt');
         moreLink.appendChild(linkIcon);
         moreLink.appendChild(document.createTextNode('Find out more'));
         p2.appendChild(moreLink);
 
+
+
         // Estructurar elementos en el orden deseado
+        
         linkA.appendChild(img);
         divDesc.appendChild(h3);
         divDesc.appendChild(p1);
         divDesc.appendChild(p2);
+
 
         divItem.appendChild(linkA);
         divItem.appendChild(divDesc);
@@ -109,7 +179,7 @@ function mostrarPosts(data) {
 }
 
 function mostrarEdu(data) {
-    //console.log(data);
+
     const eduElemento = document.getElementById('eduaction');
 
     if (!eduAgregado) {
@@ -168,8 +238,6 @@ function mostrarEdu(data) {
 
 function mostrarCertificados(data) {
     const certificateElemento = document.getElementById('certificate');
-
-
 
     if (!certAgregado) {
         for (const item of data) {    

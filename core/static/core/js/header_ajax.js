@@ -1,15 +1,15 @@
 // Variable para mantener un registro de si las redes sociales ya han sido agregadas
 let redesSocialesAgregadas = false;
-let contactoAgregado = false;
 
-
+var user = document.getElementById('context').getAttribute('user');
 
 function obtenerDatosYActualizar() {
-    fetch('/api/auth/users/')  // Usamos la URL de la vista 'UserView' en la app 'users'
+    fetch(`http://127.0.0.1:8000/api/auth/user/${user}/`)  // Usamos la URL de la vista 'UserView' en la app 'users'
         .then(response => response.json())
         .then(data => {
             // Llamar a la función para mostrar los datos en la página
-            mostrarDatosEnPagina(data[0]);
+
+            mostrarDatosEnPagina(data);
         })
         .catch(error => console.error('Error al obtener los datos:', error));
  
@@ -21,13 +21,8 @@ function mostrarDatosEnPagina(data) {
     const avatarElemento = document.getElementById('avatar');
     const nombreElemento = document.getElementById('nombre');
     const redesSocialesElemento = document.getElementById('redes-sociales');
-    const basicInfoElemento = document.getElementById('basics-information');
+    
     const studiesUniversidadElemento = document.getElementById('edu');
-    const aboutElemento = document.getElementById('about');
-
-
-    // Mostrar el nombre completo en el elemento h1
-    aboutElemento.textContent = data.about_me;
 
     // Construir la URL completa de la imagen utilizando la ubicación actual como base
     const avatarURL = new URL(data.avatar, window.location.origin);
@@ -101,38 +96,8 @@ function mostrarDatosEnPagina(data) {
     function modificarRedSocial(nombre, enlace, icono) {
         a = document.getElementById(nombre)
         a.href = enlace
-
     }
-
-    if (!contactoAgregado) {
-        if (data.email_contact) {
-            agregarInfo("email", data.email_contact, "fa-envelope");
-        }
-        if (data.telf_contact) {
-            agregarInfo("telf", data.telf_contact, "fa-phone");
-        }
-        if (data.location_contact) {
-            agregarInfo("location", data.location_contact, "fa-location-dot");
-        }
-
-        function agregarInfo(nombre, valor, icono) {
-            const i = document.createElement('i');
-            const li = document.createElement('li');
-
-        
-            i.classList.add('fas');
-            i.classList.add(icono);
-            i.setAttribute('class', 'fas fa-location-dot');
-        
-            li.append(i);
-            li.textContent += valor;
-            basicInfoElemento.appendChild(li);
-            
-        }
-                
-        contactoAgregado = true;
-    }
-
+    
 }
 
 
@@ -144,4 +109,4 @@ function mostrarDatosEnPagina(data) {
 obtenerDatosYActualizar();
 setInterval(obtenerDatosYActualizar, 1000); // Actualizar cada 5 segundos (5000 milisegundos)
     
-    //<script src="static/core/js/ajax.js"></script>
+ 

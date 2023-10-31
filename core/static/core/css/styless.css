@@ -21,6 +21,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #778492;
 }
 
+img#avatar {
+  /* width: 100px; */
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+}
+
 a {
   color: #3AAA64;
   -webkit-transition: all 0.4s ease-in-out;
@@ -129,6 +136,7 @@ a.dotted-link:hover {
 }
 
 .header .profile-image {
+
   margin-right: 30px;
   height: 180px;
 }
@@ -246,6 +254,8 @@ a.dotted-link:hover {
 
 .latest .featured img {
   margin-bottom: 30px;
+
+
 }
 
 .latest .featured .desc {
@@ -824,6 +834,7 @@ body[data-theme="dark"] .text-muted {
   .header .profile-image {
     float: none !important;
     margin: 0 auto;
+    object-fit: cover; 
   }
   .header .profile-content {
     float: none !important;

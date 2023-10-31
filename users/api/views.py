@@ -5,6 +5,7 @@ from users.api.serializers import UserSerializer, UserUpdateSerializer
 from users.models import User
 from rest_framework.decorators import api_view
 
+from rest_framework import generics
 
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
@@ -21,6 +22,17 @@ class UserView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class IndividualUser(APIView):
+    
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
 
 
 @api_view(['GET'])
